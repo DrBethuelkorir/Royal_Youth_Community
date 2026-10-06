@@ -1,6 +1,7 @@
 import { up } from "drizzle-kit/api-postgres";
 import { serial, pgTable, timestamp, varchar } from "drizzle-orm/pg-core";
 import { defineRelations } from "drizzle-orm";
+import { memberTable } from "./member";
 
 export const usersTable = pgTable("users", {
   id: serial("id").primaryKey(),
@@ -13,6 +14,3 @@ export const usersTable = pgTable("users", {
   updated_at: timestamp("updated_at").defaultNow().notNull()
 });
 
-export const usersRelations = defineRelations({ usersTable },(r) =>({
- 
-}));

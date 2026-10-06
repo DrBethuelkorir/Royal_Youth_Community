@@ -4,7 +4,7 @@ import { loansProductsTable } from "./loanProduct";
 
 export const loanApplicationsTable = pgTable("loan_applications", {
   id: serial().primaryKey(),
-  user_id: integer().notNull().references(() => usersTable.id),
+  member_id: integer().notNull().references(() => usersTable.id),
   loan_product_id: integer().notNull().references(() => loansProductsTable.id),
   amount_requested: integer().notNull(),
   purpose: varchar({ length: 255 }).notNull(),

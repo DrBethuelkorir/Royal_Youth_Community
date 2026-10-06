@@ -1,4 +1,3 @@
-import { up } from "drizzle-kit/api-postgres";
 import { serial, pgTable, timestamp, varchar } from "drizzle-orm/pg-core";
 import { defineRelations } from "drizzle-orm/relations";
 
@@ -10,4 +9,6 @@ export const rolesTable = pgTable("roles", {
   created_at: timestamp("created_at").defaultNow().notNull(),
   updated_at: timestamp("updated_at").defaultNow().notNull()
 });
+
+
 
