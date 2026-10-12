@@ -34,4 +34,4 @@ export const sendVerificationEmail = async (
       </div>
     `,
   });
-};
+};  

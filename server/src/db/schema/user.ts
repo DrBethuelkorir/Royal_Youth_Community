@@ -21,4 +21,13 @@ import { z} from "zod";
   export const loginSchema = createInsertSchema(usersTable, {
      email: z.email("must be an email"),
     password: z.string().min(1, "Password is required"),
-  })
+  });
+  export const verifyEmailSchema = z.object({
+  email: z
+    .email("Invalid email address"),
+
+  code: z
+    .string()
+    .length(6, "Verification code must be 6 digits")
+    .regex(/^\d+$/, "Verification code must contain numbers only"),
+});

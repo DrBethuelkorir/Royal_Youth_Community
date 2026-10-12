@@ -7,6 +7,7 @@ import { defineRelations } from "drizzle-orm";
 import { contributionsTable } from "./contribution";
 import { loanApplicationsTable } from "./loanApplication";
 import { loansTable } from "./loans";
+import { z } from "zod";
 
 export const memberTable = pgTable("members", {
   id: serial("id").primaryKey(),
@@ -25,4 +26,7 @@ status: varchar({ length: 50 }).notNull().default("active"),
   created_at: timestamp("created_at").defaultNow().notNull(),
   updated_at: timestamp("updated_at").defaultNow().notNull()
 });
+export const findMemberByIdSchema = z.object({
+  id: z.number().int().positive()
+})
 
