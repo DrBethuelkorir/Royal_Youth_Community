@@ -4,6 +4,8 @@ import { createRoleSchema, deleteRoleSchema, findRoleWithIDSchema, rolesTable, u
 import { eq } from "drizzle-orm";
 import { assignRoleToMemberSchema } from "../db/schema/membersToRoles";
 import { findMemberByID } from "./contoller.member";
+import { getMemberById } from "../service/service.member";
+import { getRoleById, updateMemberRole } from "../service/service.roles";
 
 export const createRole = async (req: Request, res: Response): Promise<void> => {
     const parsedData = createRoleSchema.safeParse(req.body);
@@ -79,17 +81,22 @@ export const updateRole = async (req: Request, res:Response) =>{
         return;
     }
     const { id, name } = parsedData.data
-    const existingRole = await db.select().from(rolesTable).where(eq(rolesTable.id, id));
+    try {
+        const existingRole = await db.select().from(rolesTable).where(eq(rolesTable.id, id));
 
     if(existingRole.length === 0){
         res.status(404).json({
             error: "role not found"
         })
+        return
     }
     await db.update(rolesTable).set({name}).where(eq(rolesTable.id,id)).returning();
     res.status(201).json({
         message: "role updated"
     })
+    } catch (error) {
+         res.status(500).json({ message: 'Internal server error' });
+    }
 }
 export const asignRoleToUser = async(req:Request, res:Response):Promise<void> =>{
  const parsedData = assignRoleToMemberSchema.safeParse(req.body);
@@ -100,11 +107,29 @@ export const asignRoleToUser = async(req:Request, res:Response):Promise<void> =>
     })
     return;
  }
- const {member_id, role_id } = parsedData.data;
  try {
-    
+    const {member_id, role_id} = parsedData.data
+    const member = await getMemberById(member_id);
+    if(!member){
+        res.status(404).json({
+            error:"member not found"
+        })
+        return
+    }
+    const role = await getRoleById(role_id);
+    if(!role){
+      res.status(404).json({
+            error:"role not found"
+        })
+        return  
+    }
+    const updated = await updateMemberRole(member.id,  role.id);
+    res.status(200).json({
+      message: 'Role assigned successfully',
+      data: updated,
+    });
  } catch (error) {
-    
+    res.status(500).json({ message: 'Internal server error' });
  }
 }
 
@@ -130,5 +155,16 @@ export const findRoleWithID = async(req:Request,res:Response):Promise<void> =>{
 
     } catch (error) {
      res.status(500).json({ error: "Internal server error" });
+    }
+}
+export const getAllRoles = async(req:Request, res:Response) =>{
+    try {
+        const roles = await db.select().from(rolesTable)
+    res.status(200).json({
+        message: " roles retrived",
+        data: roles
+    })
+    } catch (error) {
+       res.status(500).json({ error: "Internal server error" }); 
     }
 }
