@@ -1,11 +1,14 @@
         import {Request, Response } from 'express'
-        import { findMemberByIdSchema, memberTable } from '../db/schema/member';
+        import { findMemberByIdSchema, memberTable, registerMemberSchema } from '../db/schema/member';
         import { db } from '../db';
 
         import { eq } from 'drizzle-orm'
-import { getMemberById } from '../service/service.member';
+        import { getMemberById } from '../service/service.member';
+import { usersTable } from '../db/schema/user';
+import id from 'zod/v4/locales/id.cjs';
+import { getUserById } from '../service/service .users';
 
-        export const findMemberByID = async(req:Request, res:Response) =>{
+        export const findMemberById = async(req:Request, res:Response) =>{
             const parsedData = findMemberByIdSchema.safeParse(req.body);
             if(!parsedData.success){
                 res.status(401).json({
@@ -32,3 +35,4 @@ import { getMemberById } from '../service/service.member';
                 })
             }
         }
+        

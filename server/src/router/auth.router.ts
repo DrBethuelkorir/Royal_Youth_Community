@@ -2,8 +2,10 @@ import { Router } from 'express'
 import { loginUser, registerUser } from '../controllers/contoller.auth';
 
 
-export const router = Router();
+export const authrouter = Router();
 
-router.post("/register", registerUser);
-router.post('/login',loginUser)
+authrouter.post("/register", registerUser);
+authrouter.post('/login',loginUser)
+
+
 

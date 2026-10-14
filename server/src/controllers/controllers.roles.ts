@@ -3,7 +3,6 @@ import { db } from "../db";
 import { createRoleSchema, deleteRoleSchema, findRoleWithIDSchema, rolesTable, updateRoleSchema } from "../db/schema/role";
 import { eq } from "drizzle-orm";
 import { assignRoleToMemberSchema } from "../db/schema/membersToRoles";
-import { findMemberByID } from "./contoller.member";
 import { getMemberById } from "../service/service.member";
 import { getRoleById, updateMemberRole } from "../service/service.roles";
 
@@ -133,7 +132,7 @@ export const asignRoleToUser = async(req:Request, res:Response):Promise<void> =>
  }
 }
 
-export const findRoleWithID = async(req:Request,res:Response):Promise<void> =>{
+export const findRoleWithId = async(req:Request,res:Response):Promise<void> =>{
     const parsedData = findRoleWithIDSchema.safeParse(req.body);
      if(!parsedData.success){
         res.status(401).json({
